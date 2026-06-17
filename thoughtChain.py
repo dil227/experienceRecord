@@ -1,6 +1,6 @@
 import streamlit as st
 import sqlite3
-
+import pandas as pd
 # ---------------- DATA ----------------
 
 intensity_options = [
@@ -165,3 +165,20 @@ cursor.execute("SELECT * FROM experiences")
 rows = cursor.fetchall()
 
 st.table(rows)
+df = pd.read_sql_query(
+    "SELECT * FROM experiences",
+    conn
+)
+
+# Show table
+st.dataframe(df)
+
+# Download as CSV
+csv = df.to_csv(index=False)
+
+st.download_button(
+    label="Download Experiences CSV",
+    data=csv,
+    file_name="experiences.csv",
+    mime="text/csv"
+)
